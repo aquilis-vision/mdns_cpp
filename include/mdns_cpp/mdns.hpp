@@ -3,6 +3,8 @@
 #include <functional>
 #include <string>
 #include <thread>
+#include <list>
+#include <memory>
 
 #include "mdns_cpp/defs.hpp"
 
