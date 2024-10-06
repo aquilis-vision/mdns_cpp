@@ -12,7 +12,7 @@
 #include "mdns_cpp/logger.hpp"
 #include "mdns_cpp/mdns.hpp"
 
-void onInterruptHandler(int s) {
+[[noreturn]] void onInterruptHandler(int s) {
   std::cout << "Caught signal: " << s << std::endl;
   exit(0);
 }

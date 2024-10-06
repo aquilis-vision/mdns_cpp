@@ -74,7 +74,7 @@ std::string ipv4AddressToString(char *buffer, size_t capacity, const sockaddr_in
     len = (int)capacity - 1;
   }
 
-  return std::string(buffer, len);
+  return std::string(buffer, static_cast<unsigned int>(std::abs(len)));
 }
 
 std::string ipv6AddressToString(char *buffer, size_t capacity, const sockaddr_in6 *addr, size_t addrlen) {
@@ -96,7 +96,7 @@ std::string ipv6AddressToString(char *buffer, size_t capacity, const sockaddr_in
     len = (int)capacity - 1;
   }
 
-  return std::string(buffer, len);
+  return std::string(buffer, static_cast<unsigned int>(std::abs(len)));
 }
 
 std::string ipAddressToString(char *buffer, size_t capacity, const sockaddr *addr, size_t addrlen) {
