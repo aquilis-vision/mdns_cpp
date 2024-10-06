@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <map>
 
 namespace mdns_cpp {
 
@@ -20,6 +21,7 @@ struct QueryResult {
   std::string host;
   std::string ipv4;
   std::string ipv6;
+  std::map<std::string, std::string> txt_records;
 };
 
 }  // namespace mdns_cpp

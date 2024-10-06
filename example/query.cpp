@@ -46,11 +46,11 @@ int main() {
     std::cout << item->host << std::endl;
     std::cout << item->ipv4 << std::endl;
     std::cout << item->ipv6 << std::endl;
+    std::cout << "TXT Records number:" << item->txt_records.size() << std::endl;
+    for (auto txt : item->txt_records) {
+      std::cout << txt.first << " = " << txt.second << std::endl;
+    }
     std::cout << "----------" << std::endl;
-  }
-
-  while (true) {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 
   return 0;

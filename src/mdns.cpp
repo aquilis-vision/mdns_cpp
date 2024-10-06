@@ -275,8 +275,8 @@ static int query_callback(int sock, const struct sockaddr *from, size_t addrlen,
     mdns_string_t namestr =
         mdns_record_parse_ptr(data, size, record_offset, record_length, namebuffer, sizeof(namebuffer));
         res->host = std::string(namestr.str, namestr.str + namestr.length);
-    snprintf(str_buffer, str_capacity, "%s : %s %.*s PTR %.*s rclass 0x%x ttl %u length %d\n", fromaddrstr.data(),
-             entrytype, MDNS_STRING_FORMAT(entrystr), MDNS_STRING_FORMAT(namestr), rclass, ttl, (int)record_length);
+      snprintf(str_buffer, str_capacity, "%s : %s %.*s PTR %.*s rclass 0x%x ttl %u length %d\n", fromaddrstr.data(),
+              entrytype, MDNS_STRING_FORMAT(entrystr), MDNS_STRING_FORMAT(namestr), rclass, ttl, (int)record_length);
   } else if (rtype == MDNS_RECORDTYPE_SRV) {
     mdns_record_srv_t srv =
         mdns_record_parse_srv(data, size, record_offset, record_length, namebuffer, sizeof(namebuffer));
@@ -305,6 +305,13 @@ static int query_callback(int sock, const struct sockaddr *from, size_t addrlen,
         snprintf(str_buffer, str_capacity,"%s : %s %.*s TXT %.*s\n", fromaddrstr.data(), entrytype, MDNS_STRING_FORMAT(entrystr),
                MDNS_STRING_FORMAT(txtbuffer[itxt].key));
       }
+
+      // get the substring of txtbuffer[itxt].key.str
+      // the size is txtbuffer[itxt].key.length
+      std::string key(txtbuffer[itxt].key.str, txtbuffer[itxt].key.length);
+      std::string value(txtbuffer[itxt].value.str, txtbuffer[itxt].value.length);
+      // std::cout << key << " : " << value << std::endl;
+      res->txt_records[key] = value;
     }
   } else {
     snprintf(str_buffer, str_capacity,"%s : %s %.*s type %u rclass 0x%x ttl %u length %d\n", fromaddrstr.data(), entrytype,
