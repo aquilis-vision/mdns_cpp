@@ -702,7 +702,7 @@ mdns_discovery_recv(int sock, void* buffer, size_t capacity, mdns_record_callbac
 #ifdef __APPLE__
 	saddr->sa_len = sizeof(addr);
 #endif
-	int ret = recvfrom(sock, (char*)buffer, (mdns_size_t)capacity, 0, saddr, &addrlen);
+	long int ret = recvfrom(sock, (char*)buffer, (mdns_size_t)capacity, 0, saddr, &addrlen);
 	if (ret <= 0)
 		return 0;
 
@@ -796,7 +796,7 @@ mdns_socket_listen(int sock, void* buffer, size_t capacity, mdns_record_callback
 #ifdef __APPLE__
 	saddr->sa_len = sizeof(addr);
 #endif
-	int ret = recvfrom(sock, (char*)buffer, (mdns_size_t)capacity, 0, saddr, &addrlen);
+	long int ret = recvfrom(sock, (char*)buffer, (mdns_size_t)capacity, 0, saddr, &addrlen);
 	if (ret <= 0)
 		return 0;
 
@@ -894,7 +894,7 @@ mdns_query_send(int sock, mdns_record_type_t type, const char* name, size_t leng
 	if (capacity < (17 + length))
 		return -1;
 
-	uint16_t rclass = MDNS_CLASS_IN | MDNS_UNICAST_RESPONSE;
+	uint32_t rclass32 = MDNS_CLASS_IN | MDNS_UNICAST_RESPONSE;
 
 	struct sockaddr_storage addr_storage;
 	struct sockaddr* saddr = (struct sockaddr*)&addr_storage;
@@ -902,11 +902,13 @@ mdns_query_send(int sock, mdns_record_type_t type, const char* name, size_t leng
 	if (getsockname(sock, saddr, &saddrlen) == 0) {
 		if ((saddr->sa_family == AF_INET) &&
 		    (ntohs(((struct sockaddr_in*)saddr)->sin_port) == MDNS_PORT))
-			rclass &= ~MDNS_UNICAST_RESPONSE;
+			rclass32 &= ~MDNS_UNICAST_RESPONSE;
 		else if ((saddr->sa_family == AF_INET6) &&
 		         (ntohs(((struct sockaddr_in6*)saddr)->sin6_port) == MDNS_PORT))
-			rclass &= ~MDNS_UNICAST_RESPONSE;
+			rclass32 &= ~MDNS_UNICAST_RESPONSE;
 	}
+
+	uint16_t rclass = (uint16_t)rclass32;
 
 	uint16_t* data = (uint16_t*)buffer;
 	// Query ID
@@ -945,7 +947,7 @@ mdns_query_recv(int sock, void* buffer, size_t capacity, mdns_record_callback_fn
 #ifdef __APPLE__
 	saddr->sa_len = sizeof(addr);
 #endif
-	int ret = recvfrom(sock, (char*)buffer, (mdns_size_t)capacity, 0, saddr, &addrlen);
+	long int ret = recvfrom(sock, (char*)buffer, (mdns_size_t)capacity, 0, saddr, &addrlen);
 	if (ret <= 0)
 		return 0;
 

@@ -195,7 +195,7 @@ int mDNS::openClientSockets(int *sockets, int max_sockets, int port) {
         }
         has_ipv4_ = 1;
         if (num_sockets < max_sockets) {
-          saddr->sin_port = htons(port);
+          saddr->sin_port = htons(static_cast<uint16_t>(port));
           int sock = mdns_socket_open_ipv4(saddr);
           if (sock >= 0) {
             sockets[num_sockets++] = sock;
@@ -223,7 +223,7 @@ int mDNS::openClientSockets(int *sockets, int max_sockets, int port) {
         }
         has_ipv6_ = 1;
         if (num_sockets < max_sockets) {
-          saddr->sin6_port = htons(port);
+          saddr->sin6_port = htons(static_cast<uint16_t>(port));
           int sock = mdns_socket_open_ipv6(saddr);
           if (sock >= 0) {
             sockets[num_sockets++] = sock;
