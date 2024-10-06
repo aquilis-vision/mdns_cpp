@@ -558,7 +558,7 @@ void mDNS::executeDiscovery() {
 
   size_t capacity = 2048;
   void *buffer = malloc(capacity);
-  void *user_data = 0;
+  // void *user_data = 0;
   size_t records;
 
   // This is a simple implementation that loops for 5 seconds or as long as we
